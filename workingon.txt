@@ -1,0 +1,2 @@
+*https redirects
+*traefik routing traffic to both dashboard and nextcloud in a way that is easy for end use and able to be extended with other docker services
