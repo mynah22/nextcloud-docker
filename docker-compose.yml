@@ -1,13 +1,13 @@
 version: "3.5"
 
 #
-#  Required lines to change: 
-#  26)replace with email for letsencrypt 
-#  37)replace with host&domain of service. note that domains should be quoted in backticks. 
-#  38)add user name and password hash. hash must be produced via htpasswd, escape dollar signs by doubling, ie $ > $$. example escaped hash for 'password'- $$apr1$$6Kw4hM.I$$v65KE1axCdMMHq0gT4f9K0
-#  55&56) replace with desired root password and standard password for database.
-#  71)replace with host&domain of service. note that domains should be quoted in backticks.
-#  75)standard db password; must be same as password used in line 56.
+#  Required lines to change (all examples enclosed in <> ):
+#  29)replace with email for letsencrypt 
+#  40)replace with host&domain of service. note that domains should be quoted in backticks. 
+#  45)add user name and password hash. hash must be produced via htpasswd, escape dollar signs by doubling, ie $ > $$. example escaped hash for 'password'- $$apr1$$6Kw4hM.I$$v65KE1axCdMMHq0gT4f9K0
+#  58&59) replace with desired root password and standard password for database.
+#  74)replace with host&domain of service. note that domains should be quoted in backticks.
+#  78)standard db password; must be same as password used in line 59.
 
 
 services:
@@ -21,25 +21,28 @@ services:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
       - --entrypoints.websecure.address=:443
       - --certificatesresolvers.le.acme.tlschallenge=true
-      - --certificatesresolvers.le.acme.email=example@email.tld
+      - --certificatesresolvers.le.acme.email=<example@email.tld>
       - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.le.acme.httpchallenge=true
       - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
     ports:
-      - 8080:8080
+    #  - 8080:8080
       - 443:443
       - 80:80
     labels:
       - traefik.enable=true
       # Dashboard
-      - traefik.http.routers.traefik.rule=(Host(`<host.example.domain>`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`)))
+      - traefik.http.routers.traefik.rule=(Host(`<host.example.tld>`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`)))
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.tls.certresolver=le
       - traefik.http.routers.traefik.middlewares=admin
-      - traefik.http.middlewares.admin.basicauth.users=<dashboardusername>:<passwordhashgoeshere>
+      - traefik.http.middlewares.admin.basicauth.users=<username>:<escappedpasswordhash>
    
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -52,7 +55,7 @@ services:
     volumes:
       - db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=<mysqlrootpass>
+      - MYSQL_ROOT_PASSWORD=<rootmysqlpass>
       - MYSQL_PASSWORD=<mysqlpass>
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
@@ -68,7 +71,7 @@ services:
 
     labels:
       - traefik.enable=true
-      - traefik.http.routers.nextcloud.rule=Host(`<host.example.domain>`)
+      - traefik.http.routers.nextcloud.rule=Host(`<host.example.tld>`)
       - traefik.http.routers.nextcloud.entrypoints=websecure
       - traefik.http.routers.nextcloud.tls.certresolver=le
     environment:
