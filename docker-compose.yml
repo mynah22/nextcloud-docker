@@ -50,7 +50,7 @@ services:
     command: --transaction-isolation=READ-COMMITTED --log-basename=mariadblog
     restart: always
     volumes:
-      - ./db:/var/lib/mysql
+      - db:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=<mysqlrootpass>
       - MYSQL_PASSWORD=<mysqlpass>
@@ -76,3 +76,5 @@ services:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
+volumes:
+  db:
