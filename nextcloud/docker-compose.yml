@@ -1,6 +1,6 @@
 # Required lines to change (all examples enclosed in <> ):
 # 15, 16, 37) passwords for database. 39 must be the same as 16.
-# 30, 33) host and domain of service
+# 30, 34) host and domain of service
 #
 version: "3.5"
 services:
@@ -29,6 +29,7 @@ services:
       - traefik.http.routers.ncwebsec.entrypoints=websecure
       - traefik.http.routers.ncwebsec.rule=Host(`<nextcloudhostname.domain.tld>`)
       - traefik.http.routers.ncwebsec.tls.certresolver=le
+      # HTTPS redir
       - traefik.http.routers.ncweb.entrypoints=web
       - traefik.http.routers.ncweb.rule=Host(`<nextcloudhostname.domain.tld>`)
       - traefik.http.routers.ncweb.middlewares=nc-https
