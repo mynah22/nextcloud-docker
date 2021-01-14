@@ -2,7 +2,7 @@
 #  19)replace with email for letsencrypt 
 #  29&37)replace with host&domain of service. note that domains should be quoted in backticks. 
 #  34)add user name and password hash. hash must be produced via htpasswd, escape dollar signs by doubling, ie $ > $$. example escaped hash for 'password'- $$apr1$$6Kw4hM.I$$v65KE1axCdMMHq0gT4f9K0
-
+#
 version: "3.5"
 services:
   traefik:

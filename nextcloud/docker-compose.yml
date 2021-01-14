@@ -43,8 +43,6 @@ services:
       - traef
 volumes:
   db:
-
-
 networks:
   traef:
     external: 
