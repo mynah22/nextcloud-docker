@@ -1,0 +1,51 @@
+# Required lines to change (all examples enclosed in <> ):
+# 15, 16, 37) passwords for database. 39 must be the same as 16.
+# 30, 34) host and domain of service
+#
+version: "3.5"
+services:
+  db:
+    container_name: nextcloud-db
+    image: mariadb
+    command: --transaction-isolation=READ-COMMITTED --log-basename=mariadblog
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=<rootmysqlpass>
+      - MYSQL_PASSWORD=<mysqlpass>
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+  nextcloud:
+    container_name: nextcloud
+    image: nextcloud
+    restart: always
+    links:
+      - db
+    volumes:
+      - ./nextcloud:/var/www/html
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ncwebsec.entrypoints=websecure
+      - traefik.http.routers.ncwebsec.rule=Host(`<nextcloudhostname.domain.tld>`)
+      - traefik.http.routers.ncwebsec.tls.certresolver=le
+      # HTTPS redir
+      - traefik.http.routers.ncweb.entrypoints=web
+      - traefik.http.routers.ncweb.rule=Host(`<nextcloudhostname.domain.tld>`)
+      - traefik.http.routers.ncweb.middlewares=nc-https
+      - traefik.http.middlewares.nc-https.redirectscheme.scheme=https
+    environment:
+      - MYSQL_PASSWORD=<mysqlpass>
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+    networks:
+      - traef
+volumes:
+  db:
+
+
+networks:
+  traef:
+    external: 
+      name: proxynet
