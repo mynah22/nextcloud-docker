@@ -1,0 +1,43 @@
+#  Required lines to change (all examples enclosed in <> ):
+#  21)replace with email for letsencrypt 
+#  40)replace with host&domain of service. note that domains should be quoted in backticks. 
+#  45)add user name and password hash. hash must be produced via htpasswd, escape dollar signs by doubling, ie $ > $$. example escaped hash for 'password'- $$apr1$$6Kw4hM.I$$v65KE1axCdMMHq0gT4f9K0
+
+
+version: "3.5"
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      #- --log.level=DEBUG
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.le.acme.email=<email@example.tld>
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.le.acme.httpchallenge=true
+      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.le.acme.tlschallenge=true
+    ports:
+      - 443:443
+      - 80:80
+    labels:
+      - traefik.enable=true
+      # Dashboard
+      - traefik.http.routers.traefik.rule=(Host(`<host.example.tld>`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`)))
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.tls.certresolver=le
+      - traefik.http.routers.traefik.middlewares=dashauth
+      - traefik.http.middlewares.dashauth.basicauth.users=<username>:<escapedpasswordhash>
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - traefik-bridge
+networks:
+  traefik-bridge:
+    name: proxynet
