@@ -69,14 +69,14 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.ncweb.entrypoints=web
-      - traefik.http.routers.ncweb.rule=Host(`cloud.chimayo.xyz`)
+      - traefik.http.routers.ncweb.rule=Host(`<example.domain.tld>`)
       - traefik.http.routers.ncweb.middlewares=nc-https
       - traefik.http.middlewares.nc-https.redirectscheme.scheme=https
       - traefik.http.routers.ncwebsec.entrypoints=websecure
-      - traefik.http.routers.ncwebsec.rule=Host(`cloud.chimayo.xyz`)
+      - traefik.http.routers.ncwebsec.rule=Host(`<example.domain.tld>`)
       - traefik.http.routers.ncwebsec.tls=true
       - traefik.http.routers.ncwebsec.tls.certresolver=le
-      
+
     environment:
       - MYSQL_PASSWORD=<mysqlpass>
       - MYSQL_DATABASE=nextcloud
