@@ -21,9 +21,6 @@ services:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
-      - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      - --entrypoints.web.http.redirections.entrypoint.permanent=true
       - --entrypoints.websecure.address=:443
       - --certificatesresolvers.le.acme.tlschallenge=true
       - --certificatesresolvers.le.acme.email=<example@email.tld>
@@ -71,9 +68,15 @@ services:
 
     labels:
       - traefik.enable=true
-      - traefik.http.routers.nextcloud.rule=Host(`<host.example.tld>`)
-      - traefik.http.routers.nextcloud.entrypoints=websecure
-      - traefik.http.routers.nextcloud.tls.certresolver=le
+      - traefik.http.routers.ncweb.entrypoints=web
+      - traefik.http.routers.ncweb.rule=Host(`cloud.chimayo.xyz`)
+      - traefik.http.routers.ncweb.middlewares=nc-https
+      - traefik.http.middlewares.nc-https.redirectscheme.scheme=https
+      - traefik.http.routers.ncwebsec.entrypoints=websecure
+      - traefik.http.routers.ncwebsec.rule=Host(`cloud.chimayo.xyz`)
+      - traefik.http.routers.ncwebsec.tls=true
+      - traefik.http.routers.ncwebsec.tls.certresolver=le
+      
     environment:
       - MYSQL_PASSWORD=<mysqlpass>
       - MYSQL_DATABASE=nextcloud
