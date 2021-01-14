@@ -1,8 +1,7 @@
 # Required lines to change (all examples enclosed in <> ):
-# 16, 17, 39) passwords for database. 39 must be the same as 16.
-# 31, 35) host and domain of service
+# 15, 16, 37) passwords for database. 39 must be the same as 16.
+# 30, 33) host and domain of service
 #
-
 version: "3.5"
 services:
   db:
@@ -27,14 +26,13 @@ services:
       - ./nextcloud:/var/www/html
     labels:
       - traefik.enable=true
+      - traefik.http.routers.ncwebsec.entrypoints=websecure
+      - traefik.http.routers.ncwebsec.rule=Host(`<nextcloudhostname.domain.tld>`)
+      - traefik.http.routers.ncwebsec.tls.certresolver=le
       - traefik.http.routers.ncweb.entrypoints=web
-      - traefik.http.routers.ncweb.rule=Host(`<host.example.tld>`)
+      - traefik.http.routers.ncweb.rule=Host(`<nextcloudhostname.domain.tld>`)
       - traefik.http.routers.ncweb.middlewares=nc-https
       - traefik.http.middlewares.nc-https.redirectscheme.scheme=https
-      - traefik.http.routers.ncwebsec.entrypoints=websecure
-      - traefik.http.routers.ncwebsec.rule=Host(`<host.example.tld>`)
-      - traefik.http.routers.ncwebsec.tls=true
-      - traefik.http.routers.ncwebsec.tls.certresolver=le
     environment:
       - MYSQL_PASSWORD=<mysqlpass>
       - MYSQL_DATABASE=nextcloud
@@ -44,6 +42,8 @@ services:
       - traef
 volumes:
   db:
+
+
 networks:
   traef:
     external: 
