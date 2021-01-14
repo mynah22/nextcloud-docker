@@ -1,6 +1,6 @@
 # Required lines to change (all examples enclosed in <> ):
 # 15, 16, 38) passwords for database. 38 must be the same as 16.
-# 30, 34) host and domain of service
+# 30, 34) host and domain of service, quote in backticks
 #
 version: "3.5"
 services:
