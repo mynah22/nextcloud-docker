@@ -3,6 +3,14 @@
 # 30, 34) host and domain of service, quote in backticks
 #
 version: "3.5"
+volumes:
+  db:
+networks:
+  nextcloud-external:
+    external: 
+      name: nextcloud
+  nextcloud-internal:
+      internal: true
 services:
   db:
     container_name: nextcloud-db
@@ -42,11 +50,3 @@ services:
     networks:
       - nextcloud-internal
       - nextcloud-external
-volumes:
-  db:
-networks:
-  nextcloud-external:
-    external: 
-      name: nextcloud
-  nextcloud-internal:
-      internal: true
