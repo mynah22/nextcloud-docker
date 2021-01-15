@@ -14,6 +14,6 @@ Instructions:
 
 -Copy traefik and nextcloud directories to location of docker projects
 -Change example variables in both docker-compose.yml files
--docker-compose up in traefik directory then nextcloud directory
+-"docker-compose up -d"in traefik directory then nextcloud directory
 -nextcloud will be available for admin acct set up at nextcloudhostname.local.domain
 -traefik dashboard will be available at traefikhostname.local.domain/dashboard/  
