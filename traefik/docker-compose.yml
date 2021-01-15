@@ -4,9 +4,6 @@
 #  34)credentials for traefik dashboard. hash must be produced via htpasswd, escape dollar signs by doubling, ie $ > $$. example escaped hash for 'password'- $$apr1$$6Kw4hM.I$$v65KE1axCdMMHq0gT4f9K0
 #
 version: "3.5"
-networks:
-  nextcloud:
-    name: nextcloud-external
 services:
   traefik:
     image: traefik:latest
@@ -45,3 +42,6 @@ services:
       - ./letsencrypt:/letsencrypt
     networks:
       - nextcloud
+networks:
+  nextcloud:
+    name: nextcloud-external
