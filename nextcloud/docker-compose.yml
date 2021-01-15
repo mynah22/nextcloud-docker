@@ -16,12 +16,12 @@ services:
       - MYSQL_PASSWORD=<mysqlpass>
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
+    networks:
+      - nextcloud-internal
   nextcloud:
     container_name: nextcloud
     image: nextcloud
     restart: always
-    links:
-      - db
     volumes:
       - ./nextcloud:/var/www/html
     labels:
@@ -40,10 +40,13 @@ services:
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
     networks:
-      - nextcloud
+      - nextcloud-internal
+      - nextcloud-external
 volumes:
   db:
 networks:
-  nextcloud:
+  nextcloud-external:
     external: 
-      name: nextcloud-external
+      name: nextcloud
+  nextcloud-internal:
+      internal: true
