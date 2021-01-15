@@ -6,4 +6,14 @@ The traefik container is separated and can very easily be extended to provide tr
 This project requires split dns / host overrides for traefik to route traffic to the nextcloud and traefik dashboard services (as well as others should you care to extend it). 
 
 
-known bugs: android/ios devices (app) hang on initial log in. This can be remedied with 'old login' option (if available) or app token.   
+known bugs: android/ios devices (app) hang on initial log in. This can be remedied with 'old login' option (if available) or app token.  
+
+
+Instructions:
+
+
+-Copy traefik and nextcloud directories to location of docker projects
+-Change example variables in both docker-compose.yml files
+-docker-compose up in traefik directory then nextcloud directory
+-nextcloud will be available for admin acct set up at nextcloudhostname.local.domain
+-traefik dashboard will be available at traefikhostname.local.domain/dashboard/  
