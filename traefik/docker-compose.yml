@@ -41,7 +41,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
     networks:
-      - traefik-bridge
+      - nextcloud
 networks:
-  traefik-bridge:
-    name: proxynet
+  nextcloud:
+    name: nextcloud-external

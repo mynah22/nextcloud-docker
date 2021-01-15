@@ -40,10 +40,10 @@ services:
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
     networks:
-      - traef
+      - nextcloud
 volumes:
   db:
 networks:
-  traef:
+  nextcloud:
     external: 
-      name: proxynet
+      name: nextcloud-external
