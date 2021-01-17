@@ -22,6 +22,8 @@ services:
     container_name: nextcloud
     image: nextcloud
     restart: always
+    depends_on:
+      - db
     volumes:
       - ./nextcloud:/var/www/html
     labels:
